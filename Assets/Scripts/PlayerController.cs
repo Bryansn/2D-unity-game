@@ -21,10 +21,10 @@ public class PlayerController : PhysicsObject
 
         if (horiizontal > 0)
         {
-            desiredx = 3f;
+            desiredx = 6f;
         }
         else if (horiizontal < 0) {
-            desiredx = -3f;
+            desiredx = -6f;
         }
         else
         {
@@ -35,7 +35,7 @@ public class PlayerController : PhysicsObject
         if (Input.GetButtonDown("Jump") && grounded)
         {
             //velocity.y = 6.5f;
-            velocity.y = 10f;
+            velocity.y = 17f;
             grounded = false;
         }
     }

@@ -19,7 +19,7 @@ public class PhysicsObject : MonoBehaviour
     void FixedUpdate()
     {
         //Gravity acceleration
-        Vector3 acceleration = -9.81f * Vector3.up;
+        Vector3 acceleration = -9.81f * Vector3.up * 2f;
 
         // Update velocity
         velocity += acceleration * Time.fixedDeltaTime;
