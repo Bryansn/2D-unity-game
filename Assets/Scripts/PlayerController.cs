@@ -7,12 +7,15 @@ public class PlayerController : PhysicsObject
     public float normalJumpStrength = 17f;
     public float boostedJumpStrength = 200f;
     private float currentJumpStrength;
+    private Animator animator;
+
 
     private Vector3 starting_position;
 
     // Start is called before the first frame update
     void Start()
     {
+        animator = GetComponent<Animator>();
         starting_position = transform.position;
         currentJumpStrength = normalJumpStrength;
     }
@@ -23,6 +26,8 @@ public class PlayerController : PhysicsObject
     void Update()
     {
         float horiizontal = Input.GetAxis("Horizontal");
+        animator.SetFloat("Speed", Mathf.Abs(horiizontal));
+
 
         if (horiizontal > 0)
         {
