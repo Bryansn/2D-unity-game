@@ -4,12 +4,17 @@ using UnityEngine;
 
 public class PlayerController : PhysicsObject
 {
+    public float normalJumpStrength = 17f;
+    public float boostedJumpStrength = 200f;
+    private float currentJumpStrength;
+
     private Vector3 starting_position;
 
     // Start is called before the first frame update
     void Start()
     {
-        starting_position = transform.position;    
+        starting_position = transform.position;
+        currentJumpStrength = normalJumpStrength;
     }
 
     private bool grounded = false;
@@ -34,10 +39,11 @@ public class PlayerController : PhysicsObject
         //jump
         if (Input.GetButtonDown("Jump") && grounded)
         {
-            //velocity.y = 6.5f;
-            velocity.y = 17f;
+            velocity.y = currentJumpStrength;
             grounded = false;
         }
+
+
     }
 
     public override void CollideWithVertical(Collider2D other)
@@ -55,4 +61,17 @@ public class PlayerController : PhysicsObject
         }
             //grounded = true;
     }
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("PowerUp"))
+        {
+            Debug.Log("Power-up collected!");
+
+            currentJumpStrength = boostedJumpStrength;
+
+            Destroy(other.gameObject);
+        }
+    }
+
+
 }
