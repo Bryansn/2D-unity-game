@@ -26,7 +26,7 @@ public class PlayerController : PhysicsObject
     void Update()
     {
         float horiizontal = Input.GetAxis("Horizontal");
-        animator.SetFloat("Speed", Mathf.Abs(horiizontal));
+        animator.SetFloat("Speed", Mathf.Abs(horiizontal), 0.1f, Time.deltaTime);
 
 
         if (horiizontal > 0)
