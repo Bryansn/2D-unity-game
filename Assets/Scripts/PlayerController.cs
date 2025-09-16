@@ -4,15 +4,24 @@ using UnityEngine;
 
 public class PlayerController : PhysicsObject
 {
-    public float normalJumpStrength = 17f;
+    [Header("Jump Settings")]
+    public float normalJumpStrength = 25f;
     public float boostedJumpStrength = 200f;
+    public float wallJumpHorizontalStrength = 12f;
+    public float wallJumpVerticalStrength = 20f;
+
+    [Header("Timings")]
+    public float wallJumpLockDuration = 0.18f; // how long X is locked so FixedUpdate won't override it
+    public float jumpGraceDuration = 0.12f;    // how long vertical collisions are ignored after jump
+
     private float currentJumpStrength;
     private Animator animator;
-
-
     private Vector3 starting_position;
 
-    // Start is called before the first frame update
+    private bool grounded = false;
+    private bool wallCheck = false;
+    private int wallDir = 0; // -1 = left wall, +1 = right wall
+
     void Start()
     {
         animator = GetComponent<Animator>();
@@ -20,35 +29,45 @@ public class PlayerController : PhysicsObject
         currentJumpStrength = normalJumpStrength;
     }
 
-    private bool grounded = false;
-
-    // Update is called once per frame
     void Update()
     {
-        float horiizontal = Input.GetAxis("Horizontal");
-        animator.SetFloat("Speed", Mathf.Abs(horiizontal), 0.1f, Time.deltaTime);
+        currentJumpStrength = 25f;
+        // read input normally (we do NOT early-return, because we still want to detect jump)
+        float horizontal = Input.GetAxis("Horizontal");
+        animator.SetFloat("Speed", Mathf.Abs(horizontal), 0.1f, Time.deltaTime);
 
-
-        if (horiizontal > 0)
-        {
-            desiredx = 6f;
-        }
-        else if (horiizontal < 0) {
-            desiredx = -6f;
-        }
+        // set desired x (this will be used by PhysicsObject unless horizontal is locked)
+        if (horizontal > 0)
+            desiredx = 9f;
+        else if (horizontal < 0)
+            desiredx = -9f;
         else
-        {
             desiredx = 0f;
-        }
 
-        //jump
+        // ground jump
         if (Input.GetButtonDown("Jump") && grounded)
         {
             velocity.y = currentJumpStrength;
             grounded = false;
+
+            // prevent the vertical from being killed in the same/next Physics frame
+            StartJumpGrace(jumpGraceDuration);
         }
 
+        // wall jump: only require wallCheck (direction decided in CollideWithHorizontal)
+        if (wallCheck && Input.GetButtonDown("Jump"))
+        {
+            // launch away from the wall
+            velocity = new Vector3(-wallDir * wallJumpHorizontalStrength, wallJumpVerticalStrength, 0f);
+            grounded = false;
+            wallCheck = false;
 
+            // lock horizontal so FixedUpdate doesn't overwrite velocity.x
+            LockHorizontal(wallJumpLockDuration);
+
+            // small vertical grace so Movement doesn't zero velocity.y right away
+            StartJumpGrace(jumpGraceDuration);
+        }
     }
 
     public override void CollideWithVertical(Collider2D other)
@@ -61,22 +80,46 @@ public class PlayerController : PhysicsObject
         }
         else
         {
+            // Note: PhysicsObject's Movement will only call this when jumpGraceTimer <= 0
             grounded = true;
             velocity.y = 0;
         }
-            //grounded = true;
     }
+
+    public override void CollideWithHorizontal(Collider2D other)
+    {
+        // detect side of the wall (left/right) so we know which way to jump
+        if (other.transform.position.x < transform.position.x)
+            wallDir = -1;
+        else
+            wallDir = 1;
+
+        if (!grounded)
+        {
+            // simple wall slide value
+            velocity.y = Mathf.Max(velocity.y, -3f);
+        }
+
+        wallCheck = true;
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.CompareTag("PowerUp"))
         {
             Debug.Log("Power-up collected!");
-
             currentJumpStrength = boostedJumpStrength;
-
             Destroy(other.gameObject);
         }
     }
 
-
+  
+    private IEnumerator DisableHorizontalMovement(float duration)
+    {
+        // not used in the approach above, but kept for reference
+        float saveDesired = desiredx;
+        desiredx = 0f;
+        yield return new WaitForSeconds(duration);
+        desiredx = saveDesired;
+    }
 }

@@ -466,10 +466,10 @@ GameObject:
   m_Component:
   - component: {fileID: 757937012}
   - component: {fileID: 757937011}
-  - component: {fileID: 757937015}
   - component: {fileID: 757937014}
   - component: {fileID: 757937016}
   - component: {fileID: 757937017}
+  - component: {fileID: 757937018}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -572,8 +572,51 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!58 &757937015
-CircleCollider2D:
+--- !u!114 &757937016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 757937010}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 997dc72f41e8e824e93b40c86763fead, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  velocity: {x: 0, y: 0, z: 0}
+  desiredx: 0
+  horizontalLockTimer: 0
+  jumpGraceTimer: 0
+  normalJumpStrength: 17
+  boostedJumpStrength: 25
+  wallJumpHorizontalStrength: 12
+  wallJumpVerticalStrength: 20
+  wallJumpLockDuration: 0.18
+  jumpGraceDuration: 0.12
+--- !u!95 &757937017
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 757937010}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: bd12f3ff698d6554ab948088f31d48a9, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
+--- !u!70 &757937018
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -604,46 +647,9 @@ CircleCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  serializedVersion: 2
-  m_Radius: 0.16
---- !u!114 &757937016
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 757937010}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 997dc72f41e8e824e93b40c86763fead, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  velocity: {x: 0, y: 0, z: 0}
-  desiredx: 0
-  normalJumpStrength: 17
-  boostedJumpStrength: 25
---- !u!95 &757937017
-Animator:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 757937010}
-  m_Enabled: 1
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: bd12f3ff698d6554ab948088f31d48a9, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
+  m_Offset: {x: 0, y: 0.0042948327}
+  m_Size: {x: 0.28, y: 0.33435887}
+  m_Direction: 0
 --- !u!1 &1531552095
 GameObject:
   m_ObjectHideFlags: 0
@@ -16949,6 +16955,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   velocity: {x: 0, y: 0, z: 0}
   desiredx: 0
+  horizontalLockTimer: 0
+  jumpGraceTimer: 0
 --- !u!50 &2069291886
 Rigidbody2D:
   serializedVersion: 4

@@ -7,6 +7,7 @@ TagManager:
   - Water
   - powerup
   - PowerUp
+  - Walls
   layers:
   - Default
   - TransparentFX

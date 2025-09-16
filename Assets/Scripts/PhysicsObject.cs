@@ -6,30 +6,49 @@ public class PhysicsObject : MonoBehaviour
 {
     // Public velocity so we can see/change it in the Inspector 
     public Vector3 velocity = Vector3.zero;
-
     public float desiredx;
 
-    // Start is called before the first frame update
-    void Start()
+    // Timers for locking / grace
+    // When horizontalLockTimer > 0, FixedUpdate will NOT overwrite velocity.x with desiredx.
+    // When jumpGraceTimer > 0, Movement will NOT zero velocity.y on vertical collisions.
+    public float horizontalLockTimer = 0f;
+    public float jumpGraceTimer = 0f;
+
+    // --- Utility methods other scripts (like PlayerController) can call ---
+    public void LockHorizontal(float duration)
     {
-        
+        horizontalLockTimer = duration;
     }
 
-    // Update is called once per frame
+    public void StartJumpGrace(float duration)
+    {
+        jumpGraceTimer = duration;
+    }
+
+    // Start is empty in your original
+    void Start()
+    {
+    }
+
+    // FixedUpdate runs physics steps
     void FixedUpdate()
     {
-        //Gravity acceleration
-        Vector3 acceleration = -9.81f * Vector3.up * 2f;
+        // decrement timers
+        if (horizontalLockTimer > 0f) horizontalLockTimer -= Time.fixedDeltaTime;
+        if (jumpGraceTimer > 0f) jumpGraceTimer -= Time.fixedDeltaTime;
+
+        // Gravity acceleration
+        Vector3 acceleration = -9.81f * Vector3.up * 4f;
 
         // Update velocity
         velocity += acceleration * Time.fixedDeltaTime;
 
-        // Update Position
-        //transform.position += velocity * Time.deltaTime;
-
-        // Call our movement method instead of changing position directly
-        velocity.x = desiredx;
-        //Movement(velocity * Time.deltaTime);
+        // Update horizontal velocity only if not locked
+        if (horizontalLockTimer <= 0f)
+        {
+            velocity.x = desiredx;
+        }
+        // else: keep whatever velocity.x was set by e.g. a wall-jump
 
         // Split movement into x and y components
         Vector2 movement = velocity * Time.fixedDeltaTime;
@@ -43,29 +62,43 @@ public class PhysicsObject : MonoBehaviour
 
         RaycastHit2D[] results = new RaycastHit2D[16];
         int cnt = GetComponent<Rigidbody2D>().Cast(move, results, move.magnitude + 0.01f);
-        //if (cnt > 0)
-        //{
-        //    return;
-        //}
 
-        for(int i = 0; i < cnt; i++)
+        for (int i = 0; i < cnt; i++)
         {
             Vector2 normal = results[i].normal;
             if (movex)
             {
                 if (Mathf.Abs(normal.x) > 0.5f)
                 {
-                    move.x = 0;
-                    velocity.x = 0;
-                    CollideWithHorizontal(results[i].collider);
+                    // If we're locked horizontally (because of a wall-jump), skip cancelling X movement
+                    if (horizontalLockTimer <= 0f)
+                    {
+                        move.x = 0;
+                        velocity.x = 0;
+                        CollideWithHorizontal(results[i].collider);
+                    }
+                    else
+                    {
+                        // horizontal is locked: ignore the horizontal collision for this frame so we can move away
+                        // (do not zero velocity.x and do not call the collision callback)
+                    }
                 }
-            } else
+            }
+            else
             {
                 if (Mathf.Abs(normal.y) > 0.5f)
                 {
-                    move.y = 0;
-                    velocity.y = 0;
-                    CollideWithVertical(results[i].collider);
+                    // If we're in jump grace, ignore the vertical cancellation for a short time
+                    if (jumpGraceTimer <= 0f)
+                    {
+                        move.y = 0;
+                        velocity.y = 0;
+                        CollideWithVertical(results[i].collider);
+                    }
+                    else
+                    {
+                        // in jump grace: ignore vertical collision that would kill upward velocity
+                    }
                 }
             }
         }
@@ -75,9 +108,5 @@ public class PhysicsObject : MonoBehaviour
 
     public virtual void CollideWithHorizontal(Collider2D other) { }
 
-    public virtual void CollideWithVertical(Collider2D other)
-    {
-    }
+    public virtual void CollideWithVertical(Collider2D other) { }
 }
-
-
