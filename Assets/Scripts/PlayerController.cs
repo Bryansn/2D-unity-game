@@ -7,7 +7,7 @@ public class PlayerController : PhysicsObject
     [Header("Jump Settings")]
     public float normalJumpStrength = 25f;
     public float boostedJumpStrength = 200f;
-    public float wallJumpHorizontalStrength = 12f;
+    public float wallJumpHorizontalStrength = 7f;
     public float wallJumpVerticalStrength = 20f;
 
     [Header("Timings")]
@@ -89,10 +89,13 @@ public class PlayerController : PhysicsObject
     public override void CollideWithHorizontal(Collider2D other)
     {
         // detect side of the wall (left/right) so we know which way to jump
-        if (other.transform.position.x < transform.position.x)
-            wallDir = -1;
-        else
+        if (Input.GetAxis("Horizontal") > 0){
             wallDir = 1;
+        }
+        else
+        {
+            wallDir = -1;
+        }
 
         if (!grounded)
         {
@@ -112,14 +115,13 @@ public class PlayerController : PhysicsObject
             Destroy(other.gameObject);
         }
     }
-
   
-    private IEnumerator DisableHorizontalMovement(float duration)
-    {
-        // not used in the approach above, but kept for reference
-        float saveDesired = desiredx;
-        desiredx = 0f;
-        yield return new WaitForSeconds(duration);
-        desiredx = saveDesired;
-    }
 }
+    //private IEnumerator DisableHorizontalMovement(float duration)
+    //{
+    //    // not used in the approach above, but kept for reference
+    //    float saveDesired = desiredx;
+    //    desiredx = 0f;
+    //    yield return new WaitForSeconds(duration);
+    //    desiredx = saveDesired;
+    //}

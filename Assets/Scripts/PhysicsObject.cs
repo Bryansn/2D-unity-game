@@ -79,6 +79,7 @@ public class PhysicsObject : MonoBehaviour
                     }
                     else
                     {
+                        CollideWithHorizontal(results[i].collider);
                         // horizontal is locked: ignore the horizontal collision for this frame so we can move away
                         // (do not zero velocity.x and do not call the collision callback)
                     }
@@ -97,6 +98,7 @@ public class PhysicsObject : MonoBehaviour
                     }
                     else
                     {
+                        CollideWithVertical(results[i].collider);
                         // in jump grace: ignore vertical collision that would kill upward velocity
                     }
                 }
