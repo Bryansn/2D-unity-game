@@ -8,6 +8,7 @@ TagManager:
   - powerup
   - PowerUp
   - Walls
+  - Apple
   layers:
   - Default
   - TransparentFX
