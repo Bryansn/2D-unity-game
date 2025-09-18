@@ -84,6 +84,12 @@ public class PlayerController : PhysicsObject
             grounded = true;
             velocity.y = 0;
         }
+
+        base.CollideWithHorizontal(other);
+        if (other.TryGetComponent<AppleCollector>(out var apple))
+        {
+            apple.Collect(this);
+        }
     }
 
     public override void CollideWithHorizontal(Collider2D other)
@@ -104,17 +110,23 @@ public class PlayerController : PhysicsObject
         }
 
         wallCheck = true;
-    }
 
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("PowerUp"))
+        base.CollideWithHorizontal(other);
+        if (other.TryGetComponent<AppleCollector>(out var apple))
         {
-            Debug.Log("Power-up collected!");
-            currentJumpStrength = boostedJumpStrength;
-            Destroy(other.gameObject);
+            apple.Collect(this);
         }
     }
+
+    //private void OnTriggerEnter2D(Collider2D other)
+    //{
+    //    if (other.CompareTag("PowerUp"))
+    //    {
+    //        Debug.Log("Power-up collected!");
+    //        currentJumpStrength = boostedJumpStrength;
+    //        Destroy(other.gameObject);
+    //    }
+    //}
   
 }
     //private IEnumerator DisableHorizontalMovement(float duration)

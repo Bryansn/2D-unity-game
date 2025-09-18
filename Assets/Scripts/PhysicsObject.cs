@@ -76,6 +76,7 @@ public class PhysicsObject : MonoBehaviour
                         move.x = 0;
                         velocity.x = 0;
                         CollideWithHorizontal(results[i].collider);
+                        transform.position += (Vector3)(normal * 0.01f);
                     }
                     else
                     {
@@ -95,6 +96,7 @@ public class PhysicsObject : MonoBehaviour
                         move.y = 0;
                         velocity.y = 0;
                         CollideWithVertical(results[i].collider);
+                        transform.position += (Vector3)(normal * 0.01f);
                     }
                     else
                     {
@@ -111,4 +113,6 @@ public class PhysicsObject : MonoBehaviour
     public virtual void CollideWithHorizontal(Collider2D other) { }
 
     public virtual void CollideWithVertical(Collider2D other) { }
+
+    //public virtual void OnTriggerEnter2D(Collider2D other) { }
 }

@@ -9,20 +9,9 @@ public class AppleCollector : MonoBehaviour
     public int applesCollected = 0;
     public int totalApples = 10;
 
-    void OnTriggerEnter2D(Collider2D collision)
+    public void Collect(PlayerController player)
     {
-        if (collision.CompareTag("Apple"))
-        {
-            applesCollected++;
-            Destroy(collision.gameObject);
-
-            Debug.Log("Apples: " + applesCollected + "/" + totalApples);
-
-            if (applesCollected >= totalApples)
-            {
-                Debug.Log("yay");
-
-            }
-        }
+        Debug.Log("collected apple");
+        Destroy(gameObject);
     }
 }
