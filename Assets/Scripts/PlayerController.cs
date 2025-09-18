@@ -1,9 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
 using UnityEngine;
 
 public class PlayerController : PhysicsObject
 {
+    public int maxHealth = 100;
+    public int currentHealth;
+    public HealthBar healthBar;
+
     [Header("Jump Settings")]
     public float normalJumpStrength = 25f;
     public float boostedJumpStrength = 200f;
@@ -24,6 +29,8 @@ public class PlayerController : PhysicsObject
 
     void Start()
     {
+        currentHealth = maxHealth;
+        healthBar.SetMaxHealth(maxHealth);
         animator = GetComponent<Animator>();
         starting_position = transform.position;
         currentJumpStrength = normalJumpStrength;
@@ -31,6 +38,11 @@ public class PlayerController : PhysicsObject
 
     void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            TakeDamage(20);
+        }
+
         currentJumpStrength = 25f;
         // read input normally (we do NOT early-return, because we still want to detect jump)
         float horizontal = Input.GetAxis("Horizontal");
@@ -72,23 +84,22 @@ public class PlayerController : PhysicsObject
 
     public override void CollideWithVertical(Collider2D other)
     {
+        base.CollideWithHorizontal(other);
         if (other.gameObject.CompareTag("Water"))
         {
             transform.position = starting_position;
             velocity = Vector3.zero;
             grounded = false;
         }
+        else if (other.TryGetComponent<AppleCollector>(out var apple))
+        {
+            apple.Collect(this);
+        }
         else
         {
             // Note: PhysicsObject's Movement will only call this when jumpGraceTimer <= 0
             grounded = true;
             velocity.y = 0;
-        }
-
-        base.CollideWithHorizontal(other);
-        if (other.TryGetComponent<AppleCollector>(out var apple))
-        {
-            apple.Collect(this);
         }
     }
 
@@ -97,9 +108,11 @@ public class PlayerController : PhysicsObject
         // detect side of the wall (left/right) so we know which way to jump
         if (Input.GetAxis("Horizontal") > 0){
             wallDir = 1;
+            TakeDamage(50);
         }
         else
         {
+            TakeDamage(50);
             wallDir = -1;
         }
 
@@ -108,14 +121,23 @@ public class PlayerController : PhysicsObject
             // simple wall slide value
             velocity.y = Mathf.Max(velocity.y, -3f);
         }
-
-        wallCheck = true;
-
         base.CollideWithHorizontal(other);
         if (other.TryGetComponent<AppleCollector>(out var apple))
         {
             apple.Collect(this);
         }
+        else
+        {
+            wallCheck = true;
+        }
+
+
+    }
+
+    void TakeDamage( int damage)
+    {
+        currentHealth -= damage;
+        healthBar.SetHealth(currentHealth);
     }
 
     //private void OnTriggerEnter2D(Collider2D other)
