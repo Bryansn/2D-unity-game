@@ -5,9 +5,11 @@ using UnityEngine;
 
 public class PlayerController : PhysicsObject
 {
-    public int maxHealth = 100;
+    public int maxHealth = 4;
     public int currentHealth;
     public HealthBar healthBar;
+    public GameManager applecounter;
+    //public AppleCollector appleCollector;
 
     [Header("Jump Settings")]
     public float normalJumpStrength = 25f;
@@ -28,7 +30,7 @@ public class PlayerController : PhysicsObject
     private int wallDir = 0; // -1 = left wall, +1 = right wall
 
     void Start()
-    {
+    {   
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
         animator = GetComponent<Animator>();
@@ -94,6 +96,7 @@ public class PlayerController : PhysicsObject
         else if (other.TryGetComponent<AppleCollector>(out var apple))
         {
             apple.Collect(this);
+            applecounter.appleCounter += 1;
         }
         else
         {
@@ -123,8 +126,9 @@ public class PlayerController : PhysicsObject
         }
         base.CollideWithHorizontal(other);
         if (other.TryGetComponent<AppleCollector>(out var apple))
-        {
+        { 
             apple.Collect(this);
+            applecounter.appleCounter += 1;
         }
         else
         {
@@ -149,7 +153,7 @@ public class PlayerController : PhysicsObject
     //        Destroy(other.gameObject);
     //    }
     //}
-  
+
 }
     //private IEnumerator DisableHorizontalMovement(float duration)
     //{
