@@ -24,6 +24,8 @@ public class PlayerController : PhysicsObject
     private float currentJumpStrength;
     private Animator animator;
     private Vector3 starting_position;
+    private Vector3 defaultScale;
+    private SpriteRenderer spriteRenderer;
 
     private bool grounded = false;
     private bool wallCheck = false;
@@ -34,8 +36,10 @@ public class PlayerController : PhysicsObject
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
         animator = GetComponent<Animator>();
+        defaultScale = transform.localScale;
         starting_position = transform.position;
         currentJumpStrength = normalJumpStrength;
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     void Update()
@@ -51,12 +55,24 @@ public class PlayerController : PhysicsObject
         animator.SetFloat("Speed", Mathf.Abs(horizontal), 0.1f, Time.deltaTime);
 
         // set desired x (this will be used by PhysicsObject unless horizontal is locked)
+        // Set movement direction
         if (horizontal > 0)
+        {
             desiredx = 9f;
+            spriteRenderer.flipX = false; // face right
+        }
         else if (horizontal < 0)
+        {
             desiredx = -9f;
+            spriteRenderer.flipX = true; // face left
+        }
         else
+        {
             desiredx = 0f;
+        }
+
+
+
 
         // ground jump
         if (Input.GetButtonDown("Jump") && grounded)
