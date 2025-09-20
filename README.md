@@ -1,4 +1,4 @@
-#  Panda Forest Adventure  
+#  Panda Run
 *A 2D platformer built with Unity*
 
 ---
@@ -29,41 +29,6 @@ Inspired by classic 2D platformers like Super Mario, this game focuses on simple
 
 ---
 
-## 4. Creative Additions
-ChatGPT said:
-
-Here's your updated README / Mini GDD content with creative additions like panda animations and background music:
-
-#  Panda Forest Adventure  
-*A 2D platformer built with Unity*
-
----
-
-##  1. Game Concept & Inspiration
-
-**Concept**  
-You play as a cute panda exploring a vibrant forest filled with floating platforms and collectible apples. The goal is to collect all apples and reach the win screen.
-
-**Inspiration**  
-Inspired by classic 2D platformers like Super Mario, this game focuses on simple yet fun mechanics and colorful visuals to create an engaging experience.
-
----
-
-##  2. Core Mechanics
-
-- Move using **arrow keys** or **A/D**
-- Jump and **wall jump** with the **space bar**
-- Collect apples placed throughout the level
-- Once all apples are collected, a **“You Win!” screen** appears with buttons to retry or quit the game
-
----
-
-##  3. Win/Lose Conditions
-
--  **Win**: Player collects all apples and the win screen is triggered
--  **Lose**: Currently, there is no lose condition — the player can keep playing indefinitely until they win
-
----
 
 ##  4. Creative Additions
 
@@ -77,4 +42,5 @@ Inspired by classic 2D platformers like Super Mario, this game focuses on simple
 
 - **Playable Build**: WebGL available on [https://bryansn.itch.io/panda-forest) 
 ---
+
 
