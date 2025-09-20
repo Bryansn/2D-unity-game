@@ -9,6 +9,7 @@ TagManager:
   - PowerUp
   - Walls
   - Apple
+  - Spikes
   layers:
   - Default
   - TransparentFX

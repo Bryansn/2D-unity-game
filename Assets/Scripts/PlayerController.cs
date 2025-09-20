@@ -44,10 +44,6 @@ public class PlayerController : PhysicsObject
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            TakeDamage(20);
-        }
 
         currentJumpStrength = 25f;
         // read input normally (we do NOT early-return, because we still want to detect jump)
@@ -102,17 +98,25 @@ public class PlayerController : PhysicsObject
 
     public override void CollideWithVertical(Collider2D other)
     {
-        base.CollideWithHorizontal(other);
+        base.CollideWithVertical(other);
         if (other.gameObject.CompareTag("Water"))
         {
             transform.position = starting_position;
             velocity = Vector3.zero;
             grounded = false;
         }
+        else if (other.gameObject.CompareTag("Spikes"))
+        {
+            TakeDamage(1);
+            velocity.y = currentJumpStrength;
+            StartJumpGrace(jumpGraceDuration);
+            grounded = false;
+        }
         else if (other.TryGetComponent<AppleCollector>(out var apple))
         {
             apple.Collect(this);
             applecounter.appleCounter += 1;
+            grounded = false;
         }
         else
         {
@@ -127,30 +131,31 @@ public class PlayerController : PhysicsObject
         // detect side of the wall (left/right) so we know which way to jump
         if (Input.GetAxis("Horizontal") > 0){
             wallDir = 1;
-            TakeDamage(50);
         }
         else
         {
-            TakeDamage(50);
             wallDir = -1;
         }
+        wallCheck = false;
 
-        if (!grounded)
-        {
-            // simple wall slide value
-            velocity.y = Mathf.Max(velocity.y, -3f);
-        }
         base.CollideWithHorizontal(other);
         if (other.TryGetComponent<AppleCollector>(out var apple))
         { 
             apple.Collect(this);
             applecounter.appleCounter += 1;
         }
-        else
+        else if (other.gameObject.CompareTag("Spikes"))
         {
+            TakeDamage(1);
+            velocity.y = currentJumpStrength;
+            StartJumpGrace(jumpGraceDuration);
+        }
+        else if (!grounded)
+        {
+            // simple wall slide value
+            velocity.y = Mathf.Max(velocity.y, -3f);
             wallCheck = true;
         }
-
 
     }
 
