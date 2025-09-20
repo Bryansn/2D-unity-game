@@ -28,6 +28,7 @@ public class GameEndMenu : MonoBehaviour
 
     public void RestartGame()
     {
+        AppleCollector.applesCollected = 0;
         SceneManager.LoadScene("testscene 1");
     }
 
