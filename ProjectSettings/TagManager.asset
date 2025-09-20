@@ -10,6 +10,7 @@ TagManager:
   - Walls
   - Apple
   - Spikes
+  - FallDamage
   layers:
   - Default
   - TransparentFX

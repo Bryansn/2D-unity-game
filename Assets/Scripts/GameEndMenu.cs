@@ -6,14 +6,23 @@ using TMPro; // Needed for TextMeshProUGUI
 
 public class GameEndMenu : MonoBehaviour
 {
+    public static string endmessage = "";
     public TextMeshProUGUI endMessageText; // Reference to the message text
 
     // Call this from another script to set the message
-    public void SetEndMessage(string message)
+    //public void SetEndMessage(string message)
+    //{
+    //    if (endMessageText != null)
+    //    {
+    //        endMessageText.text = message;
+    //    }
+    //}
+
+    void Start()
     {
-        if (endMessageText != null)
+        if (endmessage != null)
         {
-            endMessageText.text = message;
+            endMessageText.text = endmessage;
         }
     }
 
@@ -28,3 +37,4 @@ public class GameEndMenu : MonoBehaviour
         Application.Quit();
     }
 }
+

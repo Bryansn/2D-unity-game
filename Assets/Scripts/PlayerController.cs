@@ -105,6 +105,10 @@ public class PlayerController : PhysicsObject
             velocity = Vector3.zero;
             grounded = false;
         }
+        else if (other.gameObject.CompareTag("FallDamage"))
+        {
+            TakeDamage(4);
+        }
         else if (other.gameObject.CompareTag("Spikes"))
         {
             TakeDamage(1);
@@ -143,6 +147,11 @@ public class PlayerController : PhysicsObject
         { 
             apple.Collect(this);
             applecounter.appleCounter += 1;
+        }
+        else if (other.gameObject.CompareTag("FallDamage"))
+        {
+            Debug.Log("hit falldamage");
+            TakeDamage(4);
         }
         else if (other.gameObject.CompareTag("Spikes"))
         {

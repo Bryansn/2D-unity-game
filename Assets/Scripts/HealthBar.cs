@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class HealthBar : MonoBehaviour
 {
@@ -16,5 +17,10 @@ public class HealthBar : MonoBehaviour
     public void SetHealth(int health)
     {
         slider.value = health; 
+        if (slider.value <= 0)
+        {
+            GameEndMenu.endmessage = "You Lose!";
+            SceneManager.LoadScene("end screen");
+        }
     }
 }
