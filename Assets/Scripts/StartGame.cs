@@ -5,6 +5,6 @@ public class StartGame : MonoBehaviour
 {
     public void PlayGame()
     {
-        SceneManager.LoadScene("testscene");  // Change to your actual game scene name
+        SceneManager.LoadScene("testscene 1");  // Change to your actual game scene name
     }
 }

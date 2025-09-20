@@ -2,24 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using TMPro; // Needed for TextMeshProUGUI
 
 public class GameEndMenu : MonoBehaviour
 {
-    // Start is called before the first frame update
-    //void Start()
-    //{
-        
-    //}
+    public TextMeshProUGUI endMessageText; // Reference to the message text
 
-    //// Update is called once per frame
-    //void Update()
-    //{
-        
-    //}
-    public void RestartGame() {
+    // Call this from another script to set the message
+    public void SetEndMessage(string message)
+    {
+        if (endMessageText != null)
+        {
+            endMessageText.text = message;
+        }
+    }
+
+    public void RestartGame()
+    {
         SceneManager.LoadScene("testscene 1");
     }
-    public void QuitGame() {
+
+    public void QuitGame()
+    {
         Debug.Log("quit pressed");
         Application.Quit();
     }
